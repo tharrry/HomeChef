@@ -25,7 +25,7 @@ export class RecipesController {
 
     //Identification data in URL, update data in Body
     @Patch(':id')
-    updateProduct(
+    updateRecipe(
         @Param('id') recipeID: number,
         @Body('author') author: string,
         @Body('userAdded') userAdded: string,
