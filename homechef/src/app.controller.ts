@@ -7,12 +7,15 @@ export class AppController {
     private readonly appService: AppService
     ) {}
 
+
+    
   @Get()
   @Render('index')
   @Header('content-type', 'text/html')
   async root() {
     return {
       isRecipesView: false,
-      isHomeView: true}
+      isHomeView: true
+    }
   }
 }

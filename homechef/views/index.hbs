@@ -7,15 +7,17 @@
   
 </head>
 
-<body>
+<body onload="setActiveNavElem()">
+  <div>
   {{>navbar}}
+  </div> 
   {{#if isHomeView }}
-  <script>console.log("homeUser")</script>
   {{>homeUser}}
   {{/if}}
+
   {{#if isRecipesView }}
-  <script>console.log("recipe")</script>
   {{>recipes}}
   {{/if}}
+  
   <script src="/js/index.js" ></script>
 </body>

@@ -1,0 +1,32 @@
+.welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome.hi {
+    font-size: 32pt;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.features {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.featurepanel {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: clamp(100px, 25%, 250px);
+}
+
+.panel-header {
+    text-align: center;
+}
+
+.featurepanel p {
+    text-align: justify;
+}
