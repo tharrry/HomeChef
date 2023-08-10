@@ -3,17 +3,16 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService
+    ) {}
 
   @Get()
   @Render('index')
-  root() {
-    return {message: 'Hello there!'}
+  @Header('content-type', 'text/html')
+  async root() {
+    return {
+      isRecipesView: false,
+      isHomeView: true}
   }
-
-  //@Get()
-  //@Header('Content-Type', 'text/html')
-  //getHello(): string {
-  //  return this.appService.getHello();
-  //}
 }

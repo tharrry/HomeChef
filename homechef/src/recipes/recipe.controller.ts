@@ -1,11 +1,23 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Patch, Delete, Render, Header } from "@nestjs/common";
 import { RecipeService } from "./recipe.service";
 import { Recipe, Ingredient } from "./schemas/recipe.schema";
 import { CreateRecipeDto } from "./dto/create-recipe.dto";
 import { UpdateRecipeDto } from "./dto/update-recipe.dto";
 
 @Controller('recipes')
-export class RecipesController {
+export class RecipesViewController {
+    @Get()
+    @Render('index')
+    @Header('content-type', 'text/html')
+        root() {
+        return {isRecipesView: true}
+    }
+
+
+}
+
+@Controller('api/recipes')
+export class RecipesApiController {
     constructor(private readonly recipeService: RecipeService) {}
 
     @Get(':recipeId')
@@ -40,42 +52,4 @@ export class RecipesController {
     async removeRecipe(@Param('recipeId') recipeId: string): Promise<any> {
         return this.recipeService.deleteRecipe(recipeId);
     }
-
-    //@Get(':id')
-    //getRecipe(@Param('id') recipeID: number): Recipe {
-    //    return this.recipeService.getRecipeByID(recipeID);
-    //}
-//
-    //@Get()
-    //getAllRecipes(): any {
-    //    return this.recipeService.getAllRecipes();
-//
-    //}
-    //
-    //@Post()
-    //addRecipe(@Body('recipe') recipe: Recipe): any {
-    //    const id = this.recipeService.insertRecipe(recipe);
-    //    return id;
-    //}
-//
-    ////Identification data in URL, update data in Body
-    //@Patch(':id')
-    //updateRecipe(
-    //    @Param('id') recipeID: number,
-    //    @Body('author') author: string,
-    //    @Body('userAdded') userAdded: string,
-    //    @Body('name') name: string,
-    //    @Body('description') description: string,
-    //    @Body('ingredients') ingredients: Ingredient[],
-    //    @Body('tags') tags: string[], ) {
-    //    this.recipeService.updateRecipe(
-    //        recipeID,
-    //        author,
-    //        userAdded,
-    //        name,
-    //        description,
-    //        ingredients,
-    //        tags);
-    //    return null;
-    //}
 }
