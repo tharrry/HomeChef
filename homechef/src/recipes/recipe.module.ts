@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { RecipesController } from "./recipe.controller";
+import { RecipesApiController, RecipesViewController } from "./recipe.controller";
 import { RecipeService } from "./recipe.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Recipe, RecipeSchema } from "./schemas/recipe.schema";
@@ -9,7 +9,7 @@ import { RecipeRepository } from "./recipe.repository";
     imports: [MongooseModule.forFeature([
         { name: Recipe.name, schema: RecipeSchema}
     ])],
-    controllers: [RecipesController],
+    controllers: [RecipesApiController, RecipesViewController],
     providers: [RecipeService, RecipeRepository]
 })
 

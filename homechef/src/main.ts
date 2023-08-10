@@ -13,7 +13,17 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
   hbs.registerPartials(join(__dirname, '..', '/views/partials'));
-  
+  hbs.registerHelper({ 
+    compare: function (variableOne, comparator, variableTwo) {
+      if (eval(variableOne + comparator + variableTwo)) {
+        return true
+      } else {
+        return false
+      }
+    },
+  });
+
+  app.enableCors();
 
   await app.listen(3000);
 

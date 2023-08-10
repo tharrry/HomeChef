@@ -1,15 +1,23 @@
+<!DOCTYPE html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <link rel="stylesheet" href="/css/baseStyle.css" />
   <link rel="stylesheet" href="/css/nav.css" />
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap"
-    rel="stylesheet"
-  />
+  
 </head>
 
-<body>
+<body onload="setActiveNavElem()">
+  <div>
   {{>navbar}}
-  {{message}}
+  </div> 
+  {{#if isHomeView }}
+  {{>homeUser}}
+  {{/if}}
+
+  {{#if isRecipesView }}
+  {{>recipes}}
+  {{/if}}
+  
+  <script src="/js/index.js" ></script>
 </body>
