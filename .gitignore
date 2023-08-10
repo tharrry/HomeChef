@@ -41,5 +41,5 @@ lerna-debug.log*
 *secret.ts
 
 # stuff?
-./homechef/dist
-./homechef/node_modules
+/homechef/dist
+/homechef/node_modules
