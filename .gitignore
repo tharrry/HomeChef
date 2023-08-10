@@ -39,3 +39,7 @@ lerna-debug.log*
 
 # Secrets
 *secret.ts
+
+# stuff?
+./homechef/dist
+./homechef/node_modules
