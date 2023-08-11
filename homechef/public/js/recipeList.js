@@ -5,29 +5,54 @@ async function getRecipes() {
 }
 
 function buildHTMLForRecipes(recipes) {
-    
-    let html = "<ul>";
 
-    recipes.forEach(recipe => {
-        html += "<li><h2>" + recipe.dishName + "</h2><p>" + recipe.author + "</p>";
+    let recipeDiv = document.querySelector('#recipes');
+    
+    let list = document.createElement("ul");
+    let recipe;
+    let dishName;
+    let author;
+
+    recipes.forEach(elem => {
+        recipe = document.createElement("li");
+        dishName = document.createElement("h2");
+        author = document.createElement("p");
+        recipe.classList.add("recipe");
+        dishName.classList.add("dishName");
+        author.classList.add("author");
+
+        dishName.innerText = elem.dishName;
+        author.innerText = elem.author;
+
+        recipe.appendChild(dishName);
+        recipe.appendChild(author);
+        list.appendChild(recipe);
+
+        let link = "http://"
+        + window.location.hostname
+        + ":3000/recipes/"
+        + elem.recipeId;
+
+        console.log(link);
+
+        recipe.addEventListener("click", function () {
+            window.location.assign(link);
+        });
+
+        recipe.style.cursor = "pointer";
     });
 
-    html+= "</ul>";
+    recipeDiv.appendChild(list);
+}
 
-    console.log(html);
+function addEventListenerToRecipe() {
 
-    return html;
 }
 
 async function printRecipes() {
     const recipes = await getRecipes();
 
-    let recipeDiv = document.querySelector('#recipes');
-
-    recipeDiv.innerHTML = buildHTMLForRecipes(recipes);
-
+    buildHTMLForRecipes(recipes);
 }
-
-
 
 printRecipes();
