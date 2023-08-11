@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import {Schema as MongooseSchema} from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 
 export type RecipeDocument = Recipe & Document;
 
