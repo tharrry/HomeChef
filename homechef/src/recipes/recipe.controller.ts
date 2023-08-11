@@ -9,11 +9,16 @@ export class RecipesViewController {
     @Get()
     @Render('index')
     @Header('content-type', 'text/html')
-        root() {
+    recipes() {
         return {isRecipesView: true}
     }
 
-
+    @Get(':recipeId')
+    @Render('index')
+    @Header('content-type', 'text/html')
+    recipe() {
+        return {isRecipeView: true}
+    }
 }
 
 @Controller('api/recipes')
