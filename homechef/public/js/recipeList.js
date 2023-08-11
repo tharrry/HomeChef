@@ -12,6 +12,7 @@ function buildHTMLForRecipes(recipes) {
     let recipe;
     let dishName;
     let author;
+    let link;
 
     recipes.forEach(elem => {
         recipe = document.createElement("li");
@@ -28,12 +29,10 @@ function buildHTMLForRecipes(recipes) {
         recipe.appendChild(author);
         list.appendChild(recipe);
 
-        let link = "http://"
+        link = "http://"
         + window.location.hostname
         + ":3000/recipes/"
         + elem.recipeId;
-
-        console.log(link);
 
         recipe.addEventListener("click", function () {
             window.location.assign(link);
@@ -41,17 +40,11 @@ function buildHTMLForRecipes(recipes) {
 
         recipe.style.cursor = "pointer";
     });
-
     recipeDiv.appendChild(list);
-}
-
-function addEventListenerToRecipe() {
-
 }
 
 async function printRecipes() {
     const recipes = await getRecipes();
-
     buildHTMLForRecipes(recipes);
 }
 
