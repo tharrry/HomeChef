@@ -7,6 +7,8 @@ export class CreateRecipeDto {
 
     dishName: string;
 
+    feeds: number;
+
     description: string;
 
     ingredients: Ingredient[];

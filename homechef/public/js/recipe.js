@@ -48,11 +48,11 @@ function buildHTMLForRecipe(recipe) {
 
     console.log(document.getElementById("dishName"))
     
-    document.getElementById("dishName").innerHTML = recipe.dishName;
+    document.getElementById("dishName").innerText = recipe.dishName;
     document.getElementById("author").innerText += recipe.author;
     document.getElementById("userAdded").innerText += recipe.userAdded;
-    //document.getElementById("feeds").innerHTML = recipe.feeds;
-    document.getElementById("description").innerHTML = recipe.description;
+    document.getElementById("feeds").innerText += " " + recipe.feeds;
+    document.getElementById("description").innerText = recipe.description;
 
     displayIngredients(recipe);
     displaySteps(recipe);
