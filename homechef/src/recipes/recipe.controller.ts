@@ -41,6 +41,7 @@ export class RecipesApiController {
             createRecipeDto.author,
             createRecipeDto.userAdded,
             createRecipeDto.dishName,
+            createRecipeDto.feeds,
             createRecipeDto.description,
             createRecipeDto.ingredients,
             createRecipeDto.steps,
