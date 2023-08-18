@@ -21,9 +21,21 @@ import { uuidv4 } from "uuid";
 
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateRecipeDtoStub } from './dto/create-recipe.dto.stub';
 
 @Controller('recipes')
 export class RecipesViewController {
+
+
+
+
+    @Get('/create')
+    @Render('index')
+    @Header('content-type', 'text/html')
+    referenceRecipe() {
+        return {isRecipeForm: true}
+    }
+
     @Get()
     @Render('index')
     @Header('content-type', 'text/html')
@@ -42,6 +54,11 @@ export class RecipesViewController {
 @Controller('api/recipes')
 export class RecipesApiController {
     constructor(private readonly recipeService: RecipeService) {}
+
+    @Get('/formReference')
+    getReferenceRecipe(): CreateRecipeDto {
+        return CreateRecipeDtoStub();
+    }
 
     @Get(':recipeId')
     async getRecipe(

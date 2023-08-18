@@ -13,6 +13,7 @@ describe('RecipeService', () => {
     const recipeId = 'a first uuid';
 
     const mockRecipe: Recipe = {
+      
         recipeId: recipeId,
         author: 'Otto',
         userAdded: 'Martin',

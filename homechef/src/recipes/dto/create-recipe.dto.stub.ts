@@ -2,24 +2,24 @@ import { CreateRecipeDto } from "./create-recipe.dto";
 
 export const CreateRecipeDtoStub = (): CreateRecipeDto => {
   return {
-    author: "Test Author",
-    userAdded: "Test User",
-    dishName: "Test Dish",
+    author: "Reference Author",
+    userAdded: "Reference User",
+    dishName: "Reference Dish",
     feeds: 4,
-    description: "Test description",
+    description: "Reference description",
     ingredients: [
         {
-            name: "Test ingredient 1",
+            name: "Reference ingredient 1",
             quantity: 1,
             unit: "pcs"
         },
         {
-            name: "Test ingredient 2",
+            name: "Reference ingredient 2",
             quantity: 2,
             unit: "tbsp"
         }
     ],
-    steps: ["Test step 1","Test step 2"],
-    tags: ["Test tag 1", "Test tag 2"]
+    steps: ["Reference step 1","Reference step 2"],
+    tags: ["Reference tag 1", "Reference tag 2"]
   };
 };
