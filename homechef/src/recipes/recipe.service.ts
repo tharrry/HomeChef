@@ -1,109 +1,50 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { v4 as uuidv4 } from 'uuid';
-import { RecipeRepository } from "./recipe.repository";
-import { Ingredient, Recipe } from "./schemas/recipe.schema";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+//import { v4 as uuidv4 } from 'uuid';
+import { Recipe } from "./schemas/recipe.schema";
 import { UpdateRecipeDto } from "./dto/update-recipe.dto";
+import mongoose, { Model } from "mongoose";
+import { CreateRecipeDto } from "./dto/create-recipe.dto";
 
 @Injectable()
 export class RecipeService {
-    constructor(private readonly recipeRepository: RecipeRepository) {}
+    constructor(
+        @InjectModel(Recipe.name) private recipeModel: mongoose.Model<Recipe>,
+      ) {}
 
     async getRecipeByID(recipeId: string): Promise<Recipe> {
-        return this.recipeRepository.findOne({recipeId});
+        const isValidId = mongoose.isValidObjectId(recipeId);
+        if (!isValidId) {
+            throw new BadRequestException('Incorrect recipeId.');
+          }
+        
+          const recipe = await this.recipeModel.findById({recipeId});
+
+        if (!recipe) {
+            throw new NotFoundException('Recipe not found.')
+        }
+
+        return recipe;
     }
 
     async getRecipes(): Promise<Recipe[]> {
-        return this.recipeRepository.find({});
+        const recipes =  await this.recipeModel.find({});
+        return recipes;
     }
 
-    async createRecipe(
-        author: string,
-        userAdded: string,
-        dishName: string,
-        feeds: number,
-        description: string,
-        ingredients: Ingredient[],
-        steps: string[],
-        tags: string[]
-    ): Promise<Recipe> {
-        return this.recipeRepository.create({
-            recipeId: uuidv4(),
-            author,
-            userAdded,
-            dishName,
-            feeds,
-            description,
-            ingredients,
-            steps,
-            tags
-        });
+    async createRecipe(recipe: Recipe): Promise<Recipe> {
+        const result = await this.recipeModel.create(recipe);
+        return result;
     }
 
-    async updateRecipe(recipeId: string, recipeUpdates: UpdateRecipeDto): Promise<Recipe> {
-        return this.recipeRepository.findOneAndUpdate({recipeId}, recipeUpdates);
+    async updateRecipe(recipeId: string, recipe: UpdateRecipeDto): Promise<Recipe> {
+        return await this.recipeModel.findByIdAndUpdate(recipeId, recipe, {
+            new: true,
+            runValidators: true,
+          });
     }
 
     async deleteRecipe(recipeId: string): Promise<any> {
-        return this.recipeRepository.findOneAndDelete({recipeId});
+        return await this.recipeModel.findByIdAndDelete(recipeId);
     }
-
-    //private recipes: Recipe[] = [];
-//
-    //getAllRecipes() {
-    //    // Using spread operator (...) to produce a copy of the recipies array
-    //    return [...this.recipes];
-    //}
-//
-    //insertRecipe(recipe: Recipe): any {
-    //    this.recipes.push(recipe);
-    //    return recipe;
-    //}
-//
-    //updateRecipe(
-    //    id: string,
-    //    author: string,
-    //    userAdded: string,
-    //    name: string,
-    //    description: string,
-    //    ingredients: Ingredient[],
-    //    tags: string[]) {
-    //        const [recipe, index] = this.findRecipe(id);
-    //        const updatedRecipe = {...recipe}
-    //        
-    //        if (author) {
-    //            updatedRecipe.author = author;
-    //        }
-    //        if (userAdded) {
-    //            updatedRecipe.userAdded = userAdded;
-    //        }
-    //        if (name) {
-    //            updatedRecipe.dishName = name;
-    //        }
-    //        if (description) {
-    //            updatedRecipe.description = description;
-    //        }
-    //        if (ingredients) {
-    //            updatedRecipe.ingredients = ingredients;
-    //        }
-    //        if (tags) {
-    //            updatedRecipe.tags = tags;
-    //        }
-//
-    //        this.recipes[index] = updatedRecipe;
-    //}
-
-    //deleteRecipe(recipeID: string) {
-    //    const [recipe, index] = this.findRecipe(recipeID);
-    //    this.recipes.splice(index, 1);
-    //}
-//
-    //private findRecipe(recipeID: string): [Recipe, number] {
-    //    const recipeIndex = this.recipes.findIndex((recipe) => recipe.id === recipeId);
-    //    const recipe = this.recipes[recipeIndex];
-    //    if (!recipe) {
-    //        throw new NotFoundException('No recipe with ID ' + recipeID);
-    //    }
-    //    return [recipe, recipeIndex];
-    //}
-
 }
