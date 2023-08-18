@@ -74,8 +74,7 @@ describe('RecipeControllers', () => {
   describe('RecipeApiController', () => {
     describe('getRecipe', () => {
         it('should return a recipe', async () => {
-            const isValidObjectIDMock = jest
-                .spyOn(mongoose, 'isValidObjectId')
+            jest.spyOn(mongoose, 'isValidObjectId')
                 .mockReturnValue(true);
             jest.spyOn(recipeService, 'getRecipeByID').mockResolvedValue(mockRecipe);
 
@@ -88,7 +87,8 @@ describe('RecipeControllers', () => {
     });
     describe('getRecipes', () => {
         it('should return a list of recipes', async () => {
-            jest.spyOn(recipeService, 'getRecipes').mockResolvedValue([mockRecipe]);
+            jest.spyOn(recipeService, 'getRecipes')
+                .mockResolvedValue([mockRecipe]);
 
             const result = await recipeApiController.getRecipes();
 
@@ -100,8 +100,7 @@ describe('RecipeControllers', () => {
     describe('createRecipe', () => {
         // TODO: find way to mock or use uuidv4() in controller
         it('should return a recipe', async () => {
-            const isValidObjectIDMock = jest
-                .spyOn(mongoose, 'isValidObjectId')
+            jest.spyOn(mongoose, 'isValidObjectId')
                 .mockReturnValue(true);
             jest.spyOn(recipeService, 'createRecipe').mockResolvedValue(mockRecipe);
 
@@ -117,7 +116,8 @@ describe('RecipeControllers', () => {
         it('should return the updated recipe', async () => {
             const updatedRecipe = { ...mockRecipe, author: 'Updated author' };
             const recipe = { author: 'Updated author' };
-            jest.spyOn(recipeService, 'updateRecipe').mockResolvedValue(updatedRecipe);
+            jest.spyOn(recipeService, 'updateRecipe')
+                .mockResolvedValue(updatedRecipe);
 
             const result = await recipeApiController.updateRecipe(mockRecipe.recipeId,recipe);
 
