@@ -1,3 +1,5 @@
+let INGREDIENT;
+
 async function getReferenceRecipe() {
     const url = "http://" + window.location.hostname + ":3000/api/recipes/formReference"
     const response = await fetch(url);
@@ -5,38 +7,70 @@ async function getReferenceRecipe() {
     return recipe;
 }
 
-function addNextIngredient() {
-    let isEmpty = false;
-    console.log(this);
+function addNextIngredient(fieldset) {
+    let outerFieldset = document.querySelector("#ingredients");
+    let emptyChildren = 0;
+
+    outerFieldset.childNodes.forEach(childfieldset => {
+        if (childfieldset.tagName != 'LEGEND') {
+            let allChildrenEmpty = true;
+            childfieldset.childNodes.forEach(child => {
+                if (child.tagName === 'INPUT') {
+                    if (!child.value == '') {
+                        allChildrenEmpty = false;
+                    }
+                }
+            });
+            if (allChildrenEmpty == true) {
+                emptyChildren += 1;
+            }
+        }
+    });
+
+    if (emptyChildren < 1 ) {
+        addInputForIngredient(true);
+    }
 }
 
-function addInputForIngredient(outerFieldset, ingredient, addDelete) {
+function removeIngredient(fieldset) {
+
+}
+
+function addInputForIngredient(addDelete) {
+
+    let outerFieldset = document.querySelector("#ingredients");
+    const children = outerFieldset.children.length;
+
     let legend = document.createElement('legend');
     legend.innerText = `Ingredient:`;
     
     let fieldset = document.createElement('fieldset');
+    fieldset.setAttribute('id', `fieldset${children}`);
     fieldset.appendChild(legend);
     
     if (addDelete) {
         let button = document.createElement('button');
-        button.setAttribute('onclick', 'removeIngredient()');
+        button.setAttribute('onclick',  function() { removeIngredient(fieldset)});
         button.innerText = 'Delete';
         fieldset.appendChild(button);
     }
     
-    Object.keys(ingredient).forEach(elem => {
+    Object.keys(INGREDIENT).forEach(elem => {
+        console.log(elem)
+        console.log(typeof(elem))
+        console.log(INGREDIENT[elem])
+        console.log(typeof(INGREDIENT[elem]))
         let input = document.createElement('input');
-        input.setAttribute("id", elem);
         input.setAttribute("name", elem);
         
         let label = document.createElement('label');
         label.setAttribute("for",elem);
         label.innerText = elem[0].toUpperCase() + elem.substring(1);
         
-        if (typeof(elem) == 'string') {
+        if (typeof(INGREDIENT[elem]) == 'string') {
             input.setAttribute("type", 'text');
         }
-        if (typeof(elem) == 'number') {
+        if (typeof(INGREDIENT[elem]) == 'number') {
             input.setAttribute("type", 'number');
         }
         
@@ -44,20 +78,31 @@ function addInputForIngredient(outerFieldset, ingredient, addDelete) {
         fieldset.appendChild(input);
     });
     outerFieldset.appendChild(fieldset);
-    fieldset.addEventListener("change", addNextIngredient(fieldset));
+    fieldset.childNodes
+    fieldset.addEventListener('change', function () {
+        addNextIngredient(fieldset);
+    });
 }
 
 function addInputForIngredients(form, attrName, recipe) {
+
+    INGREDIENT = recipe[attrName][0];
+
     let outerLegend = document.createElement('legend');
     outerLegend.innerText = 'Ingredients:';
 
     let outerFieldset = document.createElement('fieldset');
     outerFieldset.setAttribute('id', 'ingredients');
     outerFieldset.appendChild(outerLegend);
-    
-    addInputForIngredient(outerFieldset, recipe[attrName][0], false);
-    
     form.appendChild(outerFieldset);
+
+    let addButton = document.createElement('button');
+    addButton.setAttribute('onclick',  function() {
+        addInputForIngredient(true)
+    });
+
+    addInputForIngredient(false);
+    
 }
 
 function addInputForStringArray(form, attrName, index) {
@@ -138,11 +183,6 @@ function addSubmitButton(form) {
 function buildForm(form, recipe) {
     Object.keys(recipe).forEach(elem => {
         addInputForAttr(form, elem, recipe);
-        
-        //console.log(elem)
-        //console.log(recipe[elem])
-        //console.log(typeof(elem))
-        //console.log(typeof(recipe[elem]))
     });
     addSubmitButton(form);
 }
