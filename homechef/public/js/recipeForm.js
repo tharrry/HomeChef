@@ -32,11 +32,25 @@ function addNextIngredient(fieldset) {
     }
 }
 
-function removeIngredient(fieldset) {
-
+function createIngredientLabelAndInput(elem) {
+    let input = document.createElement('input');
+    input.setAttribute("name", elem);
+    
+    let label = document.createElement('label');
+    label.setAttribute("for",elem);
+    label.innerText = elem[0].toUpperCase() + elem.substring(1);
+    
+    if (typeof(INGREDIENT[elem]) == 'string') {
+        input.setAttribute("type", 'text');
+    }
+    if (typeof(INGREDIENT[elem]) == 'number') {
+        input.setAttribute("type", 'number');
+    }
+    return [label, input];
 }
 
 function addInputForIngredient(addDelete) {
+    let button = document.createElement('button');
 
     let outerFieldset = document.querySelector("#ingredients");
     const children = outerFieldset.children.length;
@@ -48,40 +62,28 @@ function addInputForIngredient(addDelete) {
     fieldset.setAttribute('id', `fieldset${children}`);
     fieldset.appendChild(legend);
     
-    if (addDelete) {
-        let button = document.createElement('button');
-        button.setAttribute('onclick',  function() { removeIngredient(fieldset)});
-        button.innerText = 'Delete';
-        fieldset.appendChild(button);
-    }
-    
     Object.keys(INGREDIENT).forEach(elem => {
-        console.log(elem)
-        console.log(typeof(elem))
-        console.log(INGREDIENT[elem])
-        console.log(typeof(INGREDIENT[elem]))
-        let input = document.createElement('input');
-        input.setAttribute("name", elem);
-        
-        let label = document.createElement('label');
-        label.setAttribute("for",elem);
-        label.innerText = elem[0].toUpperCase() + elem.substring(1);
-        
-        if (typeof(INGREDIENT[elem]) == 'string') {
-            input.setAttribute("type", 'text');
-        }
-        if (typeof(INGREDIENT[elem]) == 'number') {
-            input.setAttribute("type", 'number');
-        }
+        let [label, input] = createIngredientLabelAndInput(elem);
         
         fieldset.appendChild(label);
         fieldset.appendChild(input);
     });
+
     outerFieldset.appendChild(fieldset);
-    fieldset.childNodes
     fieldset.addEventListener('change', function () {
         addNextIngredient(fieldset);
     });
+
+    if (addDelete) {
+        button.innerText = 'Delete';
+        fieldset.appendChild(button);
+        button.setAttribute('type', 'button');
+        button.addEventListener('click', function(event){
+            event.preventDefault();
+            console.log('wha');
+            fieldset.remove();
+        });
+    }
 }
 
 function addInputForIngredients(form, attrName, recipe) {
@@ -96,34 +98,114 @@ function addInputForIngredients(form, attrName, recipe) {
     outerFieldset.appendChild(outerLegend);
     form.appendChild(outerFieldset);
 
-    let addButton = document.createElement('button');
-    addButton.setAttribute('onclick',  function() {
-        addInputForIngredient(true)
-    });
-
     addInputForIngredient(false);
-    
 }
 
-function addInputForStringArray(form, attrName, index) {
-    let legend = document.createElement('legend');
-    legend.innerText = attrName[0].toUpperCase() + attrName.substring(1);
+function moveStep(elem, dir) {
+    let fieldset = elem.parentNode;
 
-    let fieldset = document.createElement('fieldset');
-    fieldset.setAttribute('id', attrName);
+    if (dir == 'up' && fieldset.previousElementSibling ) {
+        let prevFieldset = fieldset.previousElementSibling;
+        if (prevFieldset.tagName == 'FIELDSET') {
+            let curStep = fieldset.childNodes[1].value;
+            fieldset.childNodes[1].value = prevFieldset.childNodes[1].value;
+            prevFieldset.childNodes[1].value = curStep;
+        }
+    }
 
+    if (dir == 'down' && fieldset.nextElementSibling ) {
+        let nextFieldset = fieldset.nextElementSibling;
+        if (nextFieldset.tagName == 'FIELDSET') {
+            let curStep = fieldset.childNodes[1].value;
+            fieldset.childNodes[1].value = nextFieldset.childNodes[1].value;
+            nextFieldset.childNodes[1].value = curStep;
+        }
+    }
+}
+
+function createTextArrayInputWithLabel (attrName, index) {
     let label = document.createElement('label');
     let labelName = attrName.substring(0, attrName.length - 1) + index;
+    label.innerText = 
+        `${attrName[0].toUpperCase()}${attrName.substring(1,attrName.length-1)} ${index}: `;
     label.setAttribute("for",labelName);
-    
+
     let input = document.createElement('input');
     input.setAttribute("type", "text");
     input.setAttribute("id", labelName);
     input.setAttribute("name", labelName);
-    
-    fieldset.appendChild(legend);
+
+    return [label, input];
+}
+
+function getInputOfTextFieldset(fieldset) {
+    let input = undefined;
+    fieldset.childNodes.forEach(child => {
+        if (child.tagName === 'INPUT') {
+            input = child;
+        }
+    });
+    return input;
+}
+
+function addUpDownButtons(fieldset) {
+    let buttonUp = document.createElement('button');
+    buttonUp.setAttribute('type', 'button');
+    buttonUp.setAttribute('value', 'Up');
+    buttonUp.innerText = 'Up';
+    let buttonDown = document.createElement('button');
+    buttonDown.setAttribute('type', 'button');
+    buttonDown.setAttribute('value', 'Down');
+    buttonDown.innerText = 'Down';
+    fieldset.appendChild(buttonUp);
+    fieldset.appendChild(buttonDown);
+    buttonUp.addEventListener('click', function(event){
+        event.preventDefault();
+        moveStep(event.target, 'up');
+    });
+    buttonDown.addEventListener('click', function(event){
+        event.preventDefault();
+        moveStep(event.target, 'down');
+    });
+}
+
+function addTextInput(outerFieldset, attrName) {
+    let fieldset = document.createElement('fieldset');
+
+    let [label, input] = createTextArrayInputThings(attrName, outerFieldset.childNodes.length);
+
     fieldset.appendChild(label);
     fieldset.appendChild(input);
+
+    if (attrName != 'tags') {
+        addUpDownButtons(fieldset)
+        
+    }
+    
+    outerFieldset.appendChild(fieldset);
+
+    input.addEventListener("input", (event) => {
+        const outer = event.target.parentNode.parentNode;
+        const lastSet = outer.childNodes[outer.childNodes.length-1];
+        if (event.target == getInputOfTextFieldset(lastSet)) {
+            if (event.target.value != '') {
+                addTextInput(outerFieldset, attrName);
+            }
+        }
+    });
+}
+
+function addInputForStringArray(form, attrName) {
+    let legend = document.createElement('legend');
+    legend.innerText = attrName[0].toUpperCase() + attrName.substring(1);
+    
+    let fieldset = document.createElement('fieldset');
+    fieldset.setAttribute('id', attrName);
+
+    fieldset.appendChild(legend);
+
+    addTextInput(fieldset, attrName);
+
     form.appendChild(fieldset);
 }
 
@@ -133,7 +215,7 @@ function addInputForComplexAttr(form, attrName, recipe) {
         addInputForIngredients(form, attrName, recipe);
     }
     if (typeof(attrValue[0]) == 'string') {
-        addInputForStringArray(form, attrName, 0);
+        addInputForStringArray(form, attrName);
     }
 }
 
