@@ -6,7 +6,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { mongodbURL } from "./secret";
 
 @Module({
-  imports: [MongooseModule.forRoot(mongodbURL),RecipeModule],
+  imports: [
+    MongooseModule.forRoot(mongodbURL),
+    RecipeModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

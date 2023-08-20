@@ -28,5 +28,4 @@ export class RecipeRepository {
     async findOneAndDelete(recipeFilterQuery: FilterQuery<Recipe>): Promise<any> {
         return this.recipeModel.deleteOne(recipeFilterQuery);
     }
-
 }

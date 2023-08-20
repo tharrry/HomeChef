@@ -1,11 +1,48 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete, Render, Header } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Header,
+    Param,
+    Patch,
+    Post,
+    Put,
+    Query,
+    Render,
+    Req,
+    UseGuards,
+  } from '@nestjs/common';
 import { RecipeService } from "./recipe.service";
-import { Recipe, Ingredient } from "./schemas/recipe.schema";
+import { Recipe } from "./schemas/recipe.schema";
 import { CreateRecipeDto } from "./dto/create-recipe.dto";
 import { UpdateRecipeDto } from "./dto/update-recipe.dto";
+import { uuidv4 } from "uuid";
+
+import { Query as ExpressQuery } from 'express-serve-static-core';
+import { AuthGuard } from '@nestjs/passport';
+import { CreateRecipeDtoStub } from './dto/create-recipe.dto.stub';
 
 @Controller('recipes')
 export class RecipesViewController {
+
+
+
+
+
+
+
+
+
+
+
+    @Get('/create')
+    @Render('index')
+    @Header('content-type', 'text/html')
+    referenceRecipe() {
+        return {isRecipeForm: true}
+    }
+
     @Get()
     @Render('index')
     @Header('content-type', 'text/html')
@@ -25,8 +62,16 @@ export class RecipesViewController {
 export class RecipesApiController {
     constructor(private readonly recipeService: RecipeService) {}
 
+    @Get('/formReference')
+    getReferenceRecipe(): CreateRecipeDto {
+        return CreateRecipeDtoStub();
+    }
+
     @Get(':recipeId')
-    async getRecipe(@Param('recipeId') recipeId: string): Promise<Recipe> {
+    async getRecipe(
+        @Param('recipeId')
+        recipeId: string,
+    ): Promise<Recipe> {
         return this.recipeService.getRecipeByID(recipeId);
     }
 
@@ -36,17 +81,11 @@ export class RecipesApiController {
     }
 
     @Post()
-    async createRecipe(@Body() createRecipeDto: CreateRecipeDto): Promise<Recipe> {
-        return this.recipeService.createRecipe(
-            createRecipeDto.author,
-            createRecipeDto.userAdded,
-            createRecipeDto.dishName,
-            createRecipeDto.feeds,
-            createRecipeDto.description,
-            createRecipeDto.ingredients,
-            createRecipeDto.steps,
-            createRecipeDto.tags
-            );
+    async createRecipe(
+        @Body()
+        createRecipeDto: CreateRecipeDto
+    ): Promise<Recipe> {
+        return this.recipeService.createRecipe({...createRecipeDto, recipeId: uuidv4()});
     }
 
     @Patch(':recipeId')
