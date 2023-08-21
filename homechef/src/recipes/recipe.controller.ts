@@ -17,7 +17,7 @@ import { RecipeService } from "./recipe.service";
 import { Recipe } from "./schemas/recipe.schema";
 import { CreateRecipeDto } from "./dto/create-recipe.dto";
 import { UpdateRecipeDto } from "./dto/update-recipe.dto";
-import { uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
@@ -27,14 +27,7 @@ import { CreateRecipeDtoStub } from './dto/create-recipe.dto.stub';
 export class RecipesViewController {
 
 
-
-
-
-
-
-
-
-
+    
 
     @Get('/create')
     @Render('index')
