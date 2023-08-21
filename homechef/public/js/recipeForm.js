@@ -80,7 +80,6 @@ function addInputForIngredient(addDelete) {
         button.setAttribute('type', 'button');
         button.addEventListener('click', function(event){
             event.preventDefault();
-            console.log('wha');
             fieldset.remove();
         });
     }

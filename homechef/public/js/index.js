@@ -1,7 +1,6 @@
 function setActiveNavElem() {
     const pathname = window.location.pathname;
-    let nav = document.querySelector("#topnav")
-    console.log(pathname)
+    let nav = document.querySelector("#topnav");
     switch (pathname) {
         case '/':
             nav.children[0].classList.add("active");
