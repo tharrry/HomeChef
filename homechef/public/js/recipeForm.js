@@ -333,7 +333,11 @@ function buildForm(form, recipe) {
 //
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
-                form.reset(); //reset form after AJAX success or do something else
+                const id = JSON.parse(xhr.responseText)["_id"];
+                const link = `http://${window.location.hostname}:3000/recipes/${id}`;
+                window.location.assign(link);
+                //console.log(JSON.parse(xhr.responseText)["_id"])
+                //form.reset(); //reset form after AJAX success or do something else
             }
         }
         //Fail the onsubmit to avoid page refresh.
