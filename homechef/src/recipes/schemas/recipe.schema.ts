@@ -18,6 +18,9 @@ export class Recipe {
     dishName: string;
 
     @Prop()
+    feeds: number;
+
+    @Prop()
     description: string;
 
     @Prop({ type: MongooseSchema.Types.Array})
