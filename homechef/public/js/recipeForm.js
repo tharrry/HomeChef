@@ -323,21 +323,16 @@ function buildForm(form, recipe) {
         event.preventDefault();
         var xhr = new XMLHttpRequest();
         var formData = getFormData(form);
-        console.log(formData);
-        //open the request
+
         xhr.open('POST','http://localhost:3000/api/recipes')
         xhr.setRequestHeader("Content-Type", "application/json");
-//
-        ////send the form data
+
         xhr.send(JSON.stringify(formData));
-//
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
                 const id = JSON.parse(xhr.responseText)["_id"];
                 const link = `http://${window.location.hostname}:3000/recipes/${id}`;
                 window.location.assign(link);
-                //console.log(JSON.parse(xhr.responseText)["_id"])
-                //form.reset(); //reset form after AJAX success or do something else
             }
         }
         //Fail the onsubmit to avoid page refresh.
