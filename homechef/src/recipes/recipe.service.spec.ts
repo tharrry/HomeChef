@@ -12,9 +12,9 @@ describe('RecipeService', () => {
 
     const recipeId = 'a first uuid';
 
-    const mockRecipe: Recipe = {
-      
-        recipeId: recipeId,
+    const mockRecipe = {
+        _id: '64d39261182f32e4fea58460',
+        recipeId: 'a first uuid',
         author: 'Otto',
         userAdded: 'Martin',
         dishName: 'Dish One',
@@ -84,13 +84,14 @@ describe('RecipeService', () => {
       });
 
 describe('getRecipeById', () => {
+    // TODO: Reimplement validation, then reimplement validation test
     it('should find and return a Recipe by ID', async () => {
       jest.spyOn(model, 'findById').mockResolvedValue(mockRecipe);
 
-      const result = await recipeService.getRecipeByID(mockRecipe.recipeId);
+      const result = await recipeService.getRecipeByID(mockRecipe._id);
 
       expect(model.findById).toHaveBeenCalledTimes(1);
-      expect(model.findById).toHaveBeenCalledWith({recipeId});
+      expect(model.findById).toHaveBeenCalledWith(mockRecipe._id);
       expect(result).toEqual(mockRecipe);
     });
 
@@ -111,10 +112,10 @@ describe('getRecipeById', () => {
     it('should throw NotFoundException if book is not found', async () => {
       jest.spyOn(model, 'findById').mockResolvedValue(null);
 
-      await expect(recipeService.getRecipeByID(mockRecipe.recipeId)).rejects.toThrow(
+      await expect(recipeService.getRecipeByID(mockRecipe._id)).rejects.toThrow(
         NotFoundException,
       );
-      expect(model.findById).toHaveBeenCalledWith({recipeId});
+      expect(model.findById).toHaveBeenCalledWith(mockRecipe._id);
     });
   });
   describe('updateById', () => {

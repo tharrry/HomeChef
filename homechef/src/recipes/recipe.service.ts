@@ -13,7 +13,7 @@ export class RecipeService {
       ) {}
 
     async getRecipeByID(recipeId: string): Promise<Recipe> {
-        const isValidId = true;//mongoose.isValidObjectId(recipeId);
+        const isValidId = mongoose.isValidObjectId(recipeId);
         if (!isValidId) {
             throw new BadRequestException('Incorrect recipeId.');
           }
