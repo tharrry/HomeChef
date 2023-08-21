@@ -172,14 +172,13 @@ function addUpDownButtons(fieldset) {
 function addTextInput(outerFieldset, attrName) {
     let fieldset = document.createElement('fieldset');
 
-    let [label, input] = createTextArrayInputThings(attrName, outerFieldset.childNodes.length);
+    let [label, input] = createTextArrayInputWithLabel(attrName, outerFieldset.childNodes.length);
 
     fieldset.appendChild(label);
     fieldset.appendChild(input);
 
     if (attrName != 'tags') {
-        addUpDownButtons(fieldset)
-        
+        addUpDownButtons(fieldset);
     }
     
     outerFieldset.appendChild(fieldset);
@@ -262,11 +261,84 @@ function addSubmitButton(form) {
     form.appendChild(input);
 }
 
+function fieldsetIsEmpty(fieldset) {
+    if (fieldset.tagName != 'FIELDSET') {
+        return false;
+    }
+    
+    let isEmpty = true;
+    fieldset.childNodes.forEach(child => {
+        if (child.tagName == 'INPUT' && child.value != '') {
+            isEmpty = false;
+        }
+    });
+    return isEmpty;
+}
+
+function subFormData(field) {
+    let subformdata = [];
+    field.childNodes.forEach(fieldChild => {
+        if (fieldChild.tagName == 'FIELDSET' && !fieldsetIsEmpty(fieldChild)) {
+            if (field.id == 'ingredients') {
+                let subsubformdata = {}; 
+                fieldChild.childNodes.forEach(subfieldChild => {
+                    if (subfieldChild.tagName == 'INPUT') {
+                        subsubformdata[subfieldChild.name] = subfieldChild.value;
+                    }
+                });
+                subformdata.push(subsubformdata);
+            }
+            else {
+                fieldChild.childNodes.forEach(subfieldChild => {
+                    if (subfieldChild.tagName == 'INPUT') {
+                        subformdata.push(subfieldChild.value);
+                    }
+                });
+            }
+        }
+    });
+    return subformdata;
+}
+
+function getFormData(form) {
+    let formData = {};
+    form.childNodes.forEach(child => {
+        if (child.tagName == 'INPUT' && child.name != 'submit') {
+            formData[child.id] = child.value;
+        }
+        if (child.tagName == 'FIELDSET') {
+            const subformdata = subFormData(child);
+            formData[child.id] = subformdata;
+        }
+    });
+    return formData;
+}
+
 function buildForm(form, recipe) {
     Object.keys(recipe).forEach(elem => {
         addInputForAttr(form, elem, recipe);
     });
     addSubmitButton(form);
+    form.onsubmit = function(event){
+        event.preventDefault();
+        var xhr = new XMLHttpRequest();
+        var formData = getFormData(form);
+        console.log(formData);
+        //open the request
+        xhr.open('POST','http://localhost:3000/api/recipes')
+        xhr.setRequestHeader("Content-Type", "application/json");
+//
+        ////send the form data
+        xhr.send(JSON.stringify(formData));
+//
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                form.reset(); //reset form after AJAX success or do something else
+            }
+        }
+        //Fail the onsubmit to avoid page refresh.
+        return false; 
+    }
 }
 
 async function prepareForm() {

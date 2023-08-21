@@ -13,12 +13,12 @@ export class RecipeService {
       ) {}
 
     async getRecipeByID(recipeId: string): Promise<Recipe> {
-        const isValidId = mongoose.isValidObjectId(recipeId);
+        const isValidId = true;//mongoose.isValidObjectId(recipeId);
         if (!isValidId) {
             throw new BadRequestException('Incorrect recipeId.');
           }
         
-          const recipe = await this.recipeModel.findById({recipeId});
+          const recipe = await this.recipeModel.findById(recipeId);
 
         if (!recipe) {
             throw new NotFoundException('Recipe not found.')
