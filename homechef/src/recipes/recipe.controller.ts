@@ -27,7 +27,14 @@ import { CreateRecipeDtoStub } from './dto/create-recipe.dto.stub';
 export class RecipesViewController {
 
 
+
     
+
+
+
+
+    
+
 
     @Get('/create')
     @Render('index')

@@ -5,22 +5,18 @@ async function getRecipes() {
 }
 
 function buildHTMLForRecipes(recipes) {
-
     let recipeDiv = document.querySelector('#recipes');
     
     let list = document.createElement("ul");
-    let recipe;
-    let dishName;
-    let author;
-    let link;
 
     recipes.forEach(elem => {
-        recipe = document.createElement("li");
-        dishName = document.createElement("h2");
-        author = document.createElement("p");
+        let recipe = document.createElement("li");
+        let dishName = document.createElement("h2");
+        let author = document.createElement("p");
         recipe.classList.add("recipe");
         dishName.classList.add("dishName");
         author.classList.add("author");
+        recipe.setAttribute('id', elem._id);
 
         dishName.innerText = elem.dishName;
         author.innerText = elem.author;
@@ -29,15 +25,10 @@ function buildHTMLForRecipes(recipes) {
         recipe.appendChild(author);
         list.appendChild(recipe);
 
-        link = "http://"
-        + window.location.hostname
-        + ":3000/recipes/"
-        + elem.recipeId;
-
-        recipe.addEventListener("click", function () {
+        recipe.addEventListener("click", function (event) {
+            let link = `http://${window.location.hostname}:3000/recipes/${elem._id}`;
             window.location.assign(link);
         });
-
         recipe.style.cursor = "pointer";
     });
     recipeDiv.appendChild(list);
