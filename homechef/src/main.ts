@@ -23,7 +23,9 @@ async function bootstrap() {
     },
   });
 
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://home.chef'
+  });
 
   await app.listen(3000);
 
