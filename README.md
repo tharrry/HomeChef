@@ -15,7 +15,7 @@ Add and edit you own recipe book, manage your food storage and get the best disc
 ```
 export { mongodbURL }
 
-const mongodbURL = "you/mongodb/url/?retryWrites=true&w=majority";
+const mongodbURL = "your/mongodb/url/?retryWrites=true&w=majority";
 ```
 4. Enter the `Homechef/homechef` directory
 5. Run `npm install`
