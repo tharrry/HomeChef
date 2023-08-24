@@ -33,7 +33,7 @@ const mongodbURL = "you/mongodb/url/?retryWrites=true&w=majority";
 The following routes are currently implemented:
 | Route  | Function |
 | ------------- | ------------- |
-| `/`  | Returns Homepagel, lives in `app.controller.ts` |
+| `/`  | Returns Homepage, lives in `app.controller.ts` |
 | ------------- | ------------- |
 | `/recipes/`  | API endpont returning HTML docuemnts for all sub pages of recipes API, lives in `/recipes/reciper.controller.ts`  |
 | GET `/recipes/`  | API endpont returning HTML document listing recipes provided by GET `/api/recipes/` |
