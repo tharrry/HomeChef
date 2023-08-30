@@ -11,7 +11,7 @@ Add and edit you own recipe book, manage your food storage and get the best disc
 
 1. Clone the repository
 2. Setup a mongoDB database instance. I used mongoDB Atlas. Be aware that the IP whitelist of your Atlas instance needs to be updated regularly if you are running home chef in you private network. Scripts to do so will be added in the future, see Issues #34 and #35.
-3. In `./homechef/src create` create a file `secret.ts` with the following content:
+3. In `./homechef/src` create a file `secret.ts` with the following content:
 ```
 export { mongodbURL }
 
