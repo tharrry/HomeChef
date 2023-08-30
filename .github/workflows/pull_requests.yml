@@ -35,6 +35,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Correct dir?
+        run: ls
       # This step runs `npm ci` to install any dependencies listed in your `package.json` file.
       - name: Install dependencies
         run: npm ci
