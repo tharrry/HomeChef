@@ -35,18 +35,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd homechef
-      - run: ls
       # This step runs `npm ci` to install any dependencies listed in your `package.json` file.
       - name: Install dependencies
-        run: ls
-        #run: npm ci
+        run: cd homechef && npm ci
       # This step runs the linter
       - name: Run ESLint
-        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+        run: cd homechef && npx eslint . --ext .js,.jsx,.ts,.tsx
       # This step runs the `build` script if there is one specified under the `scripts` key in your `package.json` file.
       - name: Build the application
-        run: npm run build
+        run: cd homechef && npm run build
       # This step runs the `test` script that is specified under the `scripts` key in your `package.json` file.
       - name: Run test suites
-        run: npm test
+        run: cd homechef && npm test
