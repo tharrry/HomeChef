@@ -35,6 +35,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      # This step creates a secret.ts file containing the mongoDB url
+      - name: Add  secret
+        run: cd homechef/src && echo -e "export { mongodbURL };\n\nconst mongodbURL ='${{ secrets.MONGO_URL}}';" > secret.ts
       # This step runs `npm ci` to install any dependencies listed in your `package.json` file.
       - name: Install dependencies
         run: cd homechef && npm ci
