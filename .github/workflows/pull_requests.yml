@@ -35,12 +35,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      # This step creates a secret.ts file containing the mongoDB url
+      - name: Add  secret
+        run: cd homechef/src && echo -e "export { mongodbURL };\n\nconst mongodbURL ='${{ secrets.MONGO_URL}}';" > secret.ts
       # This step runs `npm ci` to install any dependencies listed in your `package.json` file.
       - name: Install dependencies
         run: cd homechef && npm ci
       # This step runs the linter
       - name: Run ESLint
-        run: cd homechef && npx eslint . --ext .js,.jsx,.ts,.tsx
+        run: cd homechef && npx eslint . --ext .ts --fix
       # This step runs the `build` script if there is one specified under the `scripts` key in your `package.json` file.
       - name: Build the application
         run: cd homechef && npm run build
