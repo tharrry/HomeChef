@@ -2,19 +2,19 @@ import { Document } from 'mongoose';
 import { Ingredient } from '../schemas/recipe.schema';
 
 export interface RecipeDoc extends Document {
-    author: string;
+  author: string;
 
-    userAdded: string;
+  userAdded: string;
 
-    dishName: string;
+  dishName: string;
 
-    feeds: number;
+  feeds: number;
 
-    description: string;
+  description: string;
 
-    ingredients: Ingredient[];
+  ingredients: Ingredient[];
 
-    steps: string[];
+  steps: string[];
 
-    tags: string[];
+  tags: string[];
 }
