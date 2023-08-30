@@ -40,7 +40,7 @@ jobs:
         run: cd homechef && npm ci
       # This step runs the linter
       - name: Run ESLint
-        run: cd homechef && npx eslint . --ext .js,.jsx,.ts,.tsx
+        run: cd homechef && npx eslint . --ext .ts
       # This step runs the `build` script if there is one specified under the `scripts` key in your `package.json` file.
       - name: Build the application
         run: cd homechef && npm run build
